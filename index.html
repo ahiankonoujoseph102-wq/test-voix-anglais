@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- La clé API ne peut partir que vers Google : toute autre connexion est bloquée par le navigateur. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; connect-src wss://generativelanguage.googleapis.com; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Teacher Joe – test voix</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Teacher Joe <small>test de faisabilité</small></h1>
+
+    <section id="setup" class="card">
+      <label for="apiKey">Clé API Gemini</label>
+      <input id="apiKey" type="password" autocomplete="off" autocapitalize="off" spellcheck="false"
+             placeholder="Collez votre clé ici">
+      <p class="hint">La clé reste dans la mémoire de cette page. Elle n'est ni enregistrée ni envoyée ailleurs qu'à Google.</p>
+
+      <label for="model">Modèle</label>
+      <select id="model">
+        <option value="models/gemini-3.8-live" selected>gemini-3.8-live (recommandé)</option>
+        <option value="models/gemini-3.1-flash-live-preview">gemini-3.1-flash-live-preview (ancien)</option>
+        <option value="models/gemini-2.5-flash-native-audio-preview-12-2025">gemini-2.5-flash-native-audio (ancien)</option>
+      </select>
+
+      <label class="check">
+        <input id="halfDuplex" type="checkbox" checked>
+        Couper le micro pendant que Teacher Joe parle (conseillé sans écouteurs)
+      </label>
+
+      <button id="startBtn" class="primary">Commencer la séance</button>
+    </section>
+
+    <section id="live" class="card" hidden>
+      <div class="status-row">
+        <span id="status">Connexion…</span>
+        <span id="timer">5:00</span>
+      </div>
+
+      <svg id="face" viewBox="0 0 200 200" role="img" aria-label="Visage de Teacher Joe">
+        <circle cx="100" cy="100" r="90" class="skin"/>
+        <ellipse cx="70" cy="80" rx="9" ry="11" class="eye"/>
+        <ellipse cx="130" cy="80" rx="9" ry="11" class="eye"/>
+        <path d="M55 58 Q70 50 85 58" class="brow"/>
+        <path d="M115 58 Q130 50 145 58" class="brow"/>
+        <ellipse id="mouth" cx="100" cy="140" rx="28" ry="2" class="mouth"/>
+      </svg>
+
+      <div id="micLevel" aria-hidden="true"><div id="micBar"></div></div>
+      <p id="micState" class="hint">Micro : —</p>
+
+      <div id="subtitles" aria-live="polite"></div>
+
+      <button id="stopBtn">Arrêter la séance</button>
+    </section>
+
+    <section id="results" class="card" hidden>
+      <h2>Mesures de la séance</h2>
+      <table id="metrics"><tbody></tbody></table>
+      <h3>Erreurs</h3>
+      <ul id="errors"></ul>
+      <button id="copyBtn">Copier les mesures (JSON)</button>
+      <button id="againBtn" class="primary">Nouvelle séance</button>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
